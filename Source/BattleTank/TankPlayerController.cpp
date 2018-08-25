@@ -48,10 +48,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const {
 	FVector TraceEnd;
 	if (!GetCrossHairTargetLocation(TraceEnd)) { return false; }
 	
-	bool LineTraceFoundHit;
-	LineTraceFoundHit = GetWorld()->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
+	bool bLineTraceFoundHit;
+	bLineTraceFoundHit = GetWorld()->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
 
-	if (LineTraceFoundHit) { HitLocation = OutHit.Location; return true; }
+	if (bLineTraceFoundHit) { HitLocation = OutHit.Location; return true; }
 	else { return false; }
 	
 }

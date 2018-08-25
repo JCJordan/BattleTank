@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
-
+#include "TankBarrel.h"
+#include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -13,25 +15,33 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
+void UTankAimingComponent::AimAt(FVector TargetLocation, float InitialProjectileSpeed) {
 
-	// ...
+	if (!Barrel) { return; }
+	FVector LaunchVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	
-}
+	bool bVelocitySuggested;
+	bVelocitySuggested = UGameplayStatics::SuggestProjectileVelocity(this, LaunchVelocity, StartLocation, TargetLocation, InitialProjectileSpeed, false, 0.0, 0.0, ESuggestProjVelocityTraceOption::DoNotTrace);
 
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-void UTankAimingComponent::AimAt(FVector HitLocation) {
-
-	UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s"), *(GetOwner()->GetName()), *HitLocation.ToString());
+	if (bVelocitySuggested) {
+		FVector AimDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+		UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s with speed - %f gives aim: %s"), *(GetOwner()->GetName()), *TargetLocation.ToString(), InitialProjectileSpeed, *AimDirection.ToString());
+	}
 	return;
+}
+
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
+	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+
+	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
+	FRotator TargetAimRotation = AimDirection.Rotation();
+	FRotator DeltaRotation = TargetAimRotation - BarrelRotation;
+
+	Barrel->Elevate(5);
+
 }
