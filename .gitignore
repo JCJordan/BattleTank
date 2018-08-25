@@ -78,3 +78,6 @@ DerivedDataCache/*
 
 # Starter Content
 Content/StarterContent/*
+
+# Packaged Game
+WindowsNoEditor/*
