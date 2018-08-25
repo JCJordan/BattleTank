@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankBarrel;
+class UTankTurret;
 class UTankAimingComponent;
 
 UCLASS()
@@ -23,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurret* TurretToSet);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,6 +40,6 @@ private:
 	
 	// Initial launch speed of Projectile
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float InitialProjectileSpeed = 100000; // in cm/s
+	float InitialProjectileSpeed = 400000; // in cm/s
 
 };
