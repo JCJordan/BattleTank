@@ -20,6 +20,7 @@ void ATankPlayerController::BeginPlay() {
 }
 
 void ATankPlayerController::Tick(float DeltaTime) {
+
 	Super::Tick(DeltaTime);
 	AimAtCrossHair();
 
@@ -35,7 +36,7 @@ void ATankPlayerController::AimAtCrossHair() {
 	if (!GetControlledTank()) { return; }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString())
+		GetControlledTank()->AimAt(HitLocation);
 	}	
 	
 }
