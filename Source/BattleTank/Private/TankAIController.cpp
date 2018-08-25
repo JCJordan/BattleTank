@@ -2,9 +2,9 @@
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
-#include "TankPlayerController.h"
+#include "TankAIController.h"
 
-void ATankPlayerController::BeginPlay() {
+void ATankAIController::BeginPlay() {
 
 	Super::BeginPlay();
 	AActor* ControlledTank = GetControlledTank();
@@ -17,7 +17,7 @@ void ATankPlayerController::BeginPlay() {
 
 }
 
-ATank* ATankPlayerController::GetControlledTank() const {
+ATank* ATankAIController::GetControlledTank() const {
 
 	return dynamic_cast<ATank*>(GetPawn());
 }
