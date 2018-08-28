@@ -11,13 +11,8 @@
 void ATankPlayerController::BeginPlay() {
 
 	Super::BeginPlay();
-	AActor* ControlledTank = GetControlledTank();
-	if (ControlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Possessed Actor: %s"), *(ControlledTank->GetName()))
-	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("No Possessed Actor!"))
-	}
+	ControlledTank = dynamic_cast<ATank*>(GetPawn());
+	if (!ControlledTank) { UE_LOG(LogTemp, Error, TEXT("No controlled tank!"));  }
 
 }
 
@@ -28,17 +23,12 @@ void ATankPlayerController::Tick(float DeltaTime) {
 
 }
 
-ATank* ATankPlayerController::GetControlledTank() const {
-
-	return dynamic_cast<ATank*>(GetPawn());
-}
-
 void ATankPlayerController::AimAtCrossHair() {
 	
-	if (!GetControlledTank()) { return; }
+	if (!ControlledTank) { return; }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
-		GetControlledTank()->AimAt(HitLocation);
+		ControlledTank->AimAt(HitLocation);
 	}	
 	
 }
@@ -68,7 +58,6 @@ bool ATankPlayerController::GetCrossHairTargetLocation(FVector& TargetLocation) 
 
 	FVector CameraLocation, CameraRotation;
 	DeprojectScreenPositionToWorld(CrosshairScreenLocation.X, CrosshairScreenLocation.Y, CameraLocation, CameraRotation);
-	//UE_LOG(LogTemp, Warning, TEXT("CameraLocation: %s - CameraRotation: %s"), *CameraLocation.ToString(), *CameraRotation.ToString())
 
 	TargetLocation = CameraLocation + (CameraRotation * CrossHairRange);
 

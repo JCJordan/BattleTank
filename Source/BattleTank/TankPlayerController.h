@@ -21,7 +21,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	ATank * GetControlledTank() const;
+	ATank* ControlledTank;
 	void AimAtCrossHair();
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	bool GetCrossHairTargetLocation(FVector& TargetLocation) const;
