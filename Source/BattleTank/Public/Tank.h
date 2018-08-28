@@ -20,6 +20,9 @@ public:
 	ATank();
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	void AimAt(FVector TargetLocation) const;
+	
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire() const;
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
@@ -40,6 +43,6 @@ private:
 	
 	// Initial launch speed of Projectile
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float InitialProjectileSpeed = 400000; // in cm/s
+	float InitialProjectileSpeed = 400000; // in cm/s 
 
 };
