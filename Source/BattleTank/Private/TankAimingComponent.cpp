@@ -28,7 +28,6 @@ void UTankAimingComponent::AimAt(FVector TargetLocation, float InitialProjectile
 	if (bVelocitySuggested) {
 		FVector AimDirection = LaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-		UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s with speed - %f gives aim: %s"), *(GetOwner()->GetName()), *TargetLocation.ToString(), InitialProjectileSpeed, *AimDirection.ToString());
 	}
 	return;
 }
