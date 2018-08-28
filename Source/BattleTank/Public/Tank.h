@@ -44,7 +44,7 @@ private:
 	
 	// Initial launch speed of Projectile
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float InitialProjectileSpeed = 400000; // in cm/s 
+	float InitialProjectileSpeed = 15000; // in cm/s 
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;

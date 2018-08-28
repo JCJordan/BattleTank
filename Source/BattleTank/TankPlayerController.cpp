@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 #include "GameFramework/PlayerController.h"
 
 void ATankPlayerController::BeginPlay() {
@@ -46,12 +47,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const {
 	
 	FHitResult OutHit;
 	FVector TraceStart = PlayerCameraManager->GetCameraLocation();
+	
 	FVector TraceEnd;
 	if (!GetCrossHairTargetLocation(TraceEnd)) { return false; }
 	
 	bool bLineTraceFoundHit;
 	bLineTraceFoundHit = GetWorld()->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
-
+	
 	if (bLineTraceFoundHit) { HitLocation = OutHit.Location; return true; }
 	else { return false; }
 	
@@ -66,6 +68,7 @@ bool ATankPlayerController::GetCrossHairTargetLocation(FVector& TargetLocation) 
 
 	FVector CameraLocation, CameraRotation;
 	DeprojectScreenPositionToWorld(CrosshairScreenLocation.X, CrosshairScreenLocation.Y, CameraLocation, CameraRotation);
+	//UE_LOG(LogTemp, Warning, TEXT("CameraLocation: %s - CameraRotation: %s"), *CameraLocation.ToString(), *CameraRotation.ToString())
 
 	TargetLocation = CameraLocation + (CameraRotation * CrossHairRange);
 
