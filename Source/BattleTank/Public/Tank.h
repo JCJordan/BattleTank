@@ -23,7 +23,7 @@ public:
 	void AimAt(FVector TargetLocation) const;
 	
 	UFUNCTION(BlueprintCallable, Category = Firing)
-	void Fire() const;
+	void Fire();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
@@ -50,5 +50,8 @@ private:
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
 
 	UTankBarrel* Barrel = nullptr;
+
+	float ReloadTime = 3.0f; // In Seconds
+	double LastFireTime = 0.0;
 
 };
