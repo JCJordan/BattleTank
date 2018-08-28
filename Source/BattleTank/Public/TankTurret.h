@@ -19,7 +19,7 @@ public:
 private:
 
 	// Max Degress the turret can move each second
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MaxDegressPerSecond = 20;
 
 };

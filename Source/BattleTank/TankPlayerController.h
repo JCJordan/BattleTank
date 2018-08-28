@@ -27,7 +27,7 @@ private:
 	bool GetCrossHairTargetLocation(FVector& TargetLocation) const;
 
 	// The range the tank can see.
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairRange = 1000000; //In Cm
 
 	// The X location of the Crosshair on the screen in fraction of viewport.

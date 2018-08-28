@@ -46,15 +46,15 @@ public:
 private:
 	
 	// Initial launch speed of Projectile
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float InitialProjectileSpeed = 15000; // in cm/s 
 
 	// Time in seconds to reload barrel.
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTime = 3.0f; // In Seconds
 
 	// Reference to Projectile Blueprint Actor
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
 
 	UTankBarrel* Barrel = nullptr;
