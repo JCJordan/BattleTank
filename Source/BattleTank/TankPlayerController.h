@@ -26,12 +26,15 @@ private:
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	bool GetCrossHairTargetLocation(FVector& TargetLocation) const;
 
+	// The range the tank can see.
 	UPROPERTY(EditAnywhere)
 	float CrossHairRange = 1000000; //In Cm
 
+	// The X location of the Crosshair on the screen in fraction of viewport.
 	UPROPERTY(EditAnywhere)
 	float CrosshairXLocation = 0.5;
 
+	// The Y location of the Crosshair on the screen in fraction of viewport.
 	UPROPERTY(EditAnywhere)
 	float CrosshairYLocation = 0.33333;
 	

@@ -21,15 +21,18 @@ public:
 	ATank();
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	void AimAt(FVector TargetLocation) const;
-	
-	UFUNCTION(BlueprintCallable, Category = Firing)
-	void Fire();
 
+	// Set the Barrel Blueprint reference the tank will use
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
+	// Set the Turret Blueprint reference the barrel will use
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);
+
+	// Make the tank fire at it's current target location.
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,12 +49,16 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float InitialProjectileSpeed = 15000; // in cm/s 
 
+	// Time in seconds to reload barrel.
 	UPROPERTY(EditAnywhere, Category = Firing)
+	float ReloadTime = 3.0f; // In Seconds
+
+	// Reference to Projectile Blueprint Actor
+	UPROPERTY(EditAnywhere, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
 
 	UTankBarrel* Barrel = nullptr;
-
-	float ReloadTime = 3.0f; // In Seconds
+	
 	double LastFireTime = 0.0;
 
 };
