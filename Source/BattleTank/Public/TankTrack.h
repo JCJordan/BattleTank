@@ -20,6 +20,6 @@ public:
 	
 	// Set max driving force that throttle can cause.
 	UPROPERTY(EditDefaultsOnly)
-	float MaxDrivingForce = 40000000; // 40 ton tank (kg) * 100000g acceleration (1000000m/s)
+	float MaxDrivingForce = 40000000; // 40 ton tank (kg) * 1000g acceleration (1000000cm/s)
 	
 };

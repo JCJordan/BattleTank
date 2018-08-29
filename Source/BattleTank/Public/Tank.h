@@ -9,8 +9,10 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class UTankMovementComponent;
 class AProjectile;
 
+//
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -19,7 +21,6 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-	UTankAimingComponent* TankAimingComponent = nullptr;
 	void AimAt(FVector TargetLocation) const;
 
 	// Set the Barrel Blueprint reference the tank will use
@@ -37,6 +38,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 
@@ -59,6 +65,6 @@ private:
 
 	UTankBarrel* Barrel = nullptr;
 	
-	double LastFireTime = 0.0;
+	float LastFireTime = 0.0;
 
 };
