@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright FairgroundPandaStudio
 
 #pragma once
 
@@ -8,9 +8,7 @@
 
 class ATank;
 
-/**
- * 
- */
+// Controller for AI Tanks
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {
