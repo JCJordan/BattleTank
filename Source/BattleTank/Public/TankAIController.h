@@ -24,7 +24,7 @@ private:
 	ATank* PlayerTank;
 
 	// How close enemy tank will get to player tank (in cms)
-	UPROPERTY(EditDefaultsOnly, Category = Movement)
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float AcceptanceRadius = 3000;
 
 
