@@ -24,7 +24,10 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(TankAimingComponent)) { UE_LOG(LogTemp, Error, TEXT("No Aiming Component on Tank!")); return; }
+
+	TankMovementComponent = FindComponentByClass<UTankMovementComponent>();
 	if (!ensure(TankMovementComponent)) { UE_LOG(LogTemp, Error, TEXT("No Movement Component on Tank!")); return; }
 }
 
