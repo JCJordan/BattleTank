@@ -1,4 +1,4 @@
-// Copyright FairgroundPandaStudio
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
 #include "Tank.h"
@@ -6,18 +6,13 @@
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "TankAimingComponent.h"
 #include "GameFramework/PlayerController.h"
 
 void ATankPlayerController::BeginPlay() {
 
 	Super::BeginPlay();
 	ControlledTank = dynamic_cast<ATank*>(GetPawn());
-	if (!ensure(ControlledTank)) { UE_LOG(LogTemp, Error, TEXT("No controlled tank!"));  }
-	UTankAimingComponent* AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent)) { FoundAimingComponent(AimingComponent); }
-	else { UE_LOG(LogTemp, Error, TEXT("Aiming Component not found on controlled tank! (At BeginPlay)")) }
-	
+	if (!ControlledTank) { UE_LOG(LogTemp, Error, TEXT("No controlled tank!"));  }
 
 }
 
@@ -30,7 +25,7 @@ void ATankPlayerController::Tick(float DeltaTime) {
 
 void ATankPlayerController::AimAtCrossHair() {
 	
-	if (!ensure(ControlledTank)) { return; }
+	if (!ControlledTank) { return; }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
 		ControlledTank->AimAt(HitLocation);
@@ -44,7 +39,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const {
 	FVector TraceStart = PlayerCameraManager->GetCameraLocation();
 	
 	FVector TraceEnd;
-	if (!ensure(GetCrossHairTargetLocation(TraceEnd))) { return false; }
+	if (!GetCrossHairTargetLocation(TraceEnd)) { return false; }
 	
 	bool bLineTraceFoundHit;
 	bLineTraceFoundHit = GetWorld()->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);

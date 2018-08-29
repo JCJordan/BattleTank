@@ -24,8 +24,8 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!ensure(TankAimingComponent)) { UE_LOG(LogTemp, Error, TEXT("No Aiming Component on Tank!")); return; }
-	if (!ensure(TankMovementComponent)) { UE_LOG(LogTemp, Error, TEXT("No Movement Component on Tank!")); return; }
+	if (!TankAimingComponent) { UE_LOG(LogTemp, Error, TEXT("No Aiming Component on Tank!")); return; }
+	if (!TankMovementComponent) { UE_LOG(LogTemp, Error, TEXT("No Movement Component on Tank!")); return; }
 }
 
 // Called to bind functionality to input
@@ -36,16 +36,13 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 void ATank::AimAt(FVector TargetLocation) const {
-
-	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(TargetLocation, InitialProjectileSpeed);
-
 	return;
 }
 
 void ATank::Fire() {
 
-	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+	if (!Barrel || !ProjectileBlueprint) { return; }
 
 	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
 	if (isReloaded) {

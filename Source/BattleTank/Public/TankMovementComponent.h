@@ -16,12 +16,15 @@ class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 	
 public:
 
+	// Initialise Track (Left & Right) References.
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
+	// Move tank forward/backwards (Translated to manual controls)
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendMoveForward(float Throw);
 
+	// Turn tank right/left (Translated to manual controls)
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendTurnRight(float Throw);
 
