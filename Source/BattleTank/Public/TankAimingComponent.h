@@ -25,6 +25,8 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 
 public:	
 
+	UTankAimingComponent();
+
 	// Initialise Barrel and Turret References.
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
@@ -59,6 +61,12 @@ private:
 
 	float LastFireTime = 0.0;
 
+	FVector TargetAimDirection;
+
 	void MoveBarrelTowards(FVector AimDirection);
+	bool IsBarrelMoving();
+
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 	
 };

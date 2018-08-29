@@ -9,12 +9,30 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+UTankAimingComponent::UTankAimingComponent() {
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
 
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 
 	return;
+}
+
+void UTankAimingComponent::BeginPlay() {
+
+	Super::BeginPlay();
+	LastFireTime = GetWorld()->GetTimeSeconds();
+
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
+
+	if (GetWorld()->GetTimeSeconds() - LastFireTime < ReloadTime) { FiringState = EFiringState::Reloading; }
+	else if (IsBarrelMoving()) { FiringState = EFiringState::Aiming; }
+	else { FiringState = EFiringState::Ready; }
 }
 
 void UTankAimingComponent::AimAt(FVector TargetLocation) {
@@ -37,7 +55,8 @@ void UTankAimingComponent::AimAt(FVector TargetLocation) {
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 
 	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
-	FRotator TargetAimRotation = AimDirection.Rotation();
+	TargetAimDirection = AimDirection;
+	FRotator TargetAimRotation = TargetAimDirection.Rotation();
 	FRotator DeltaRotation = TargetAimRotation - BarrelRotation;
 
 	Barrel->Elevate(DeltaRotation.Pitch);
@@ -46,12 +65,18 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	return;
 }
 
+bool UTankAimingComponent::IsBarrelMoving() {
+
+	if (!ensure(Barrel)) { return false; }
+	FVector CurrentBarrelDirection = Barrel->GetForwardVector();
+
+	return !CurrentBarrelDirection.Equals(TargetAimDirection, 0.1f);
+}
+
 void UTankAimingComponent::Fire() {
 
 	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
-
-	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
-	if (isReloaded) {
+	if (FiringState != EFiringState::Reloading) {
 		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 
 		Projectile->LaunchProjectile(InitialProjectileSpeed);
