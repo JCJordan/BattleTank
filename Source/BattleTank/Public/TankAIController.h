@@ -6,8 +6,6 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
-
 // Controller for AI Tanks
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
@@ -20,8 +18,8 @@ public:
 
 private:
 
-	ATank* ControlledTank;
-	ATank* PlayerTank;
+	APawn* ControlledTank;
+	APawn* PlayerTank;
 
 	// How close enemy tank will get to player tank (in cms)
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")

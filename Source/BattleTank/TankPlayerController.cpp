@@ -1,24 +1,22 @@
 // Copyright FairgroundPandaStudio
 
 #include "TankPlayerController.h"
-#include "Tank.h"
+#include "TankAimingComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "TankAimingComponent.h"
 #include "GameFramework/PlayerController.h"
 
 void ATankPlayerController::BeginPlay() {
 
 	Super::BeginPlay();
-	ControlledTank = dynamic_cast<ATank*>(GetPawn());
+	ControlledTank = GetPawn();
 	if (!ensure(ControlledTank)) { UE_LOG(LogTemp, Error, TEXT("No controlled tank!"));  }
-	UTankAimingComponent* AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	UTankAimingComponent* AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent)) { FoundAimingComponent(AimingComponent); }
 	else { UE_LOG(LogTemp, Error, TEXT("Aiming Component not found on controlled tank! (At BeginPlay)")) }
 	
-
 }
 
 void ATankPlayerController::Tick(float DeltaTime) {
@@ -33,7 +31,7 @@ void ATankPlayerController::AimAtCrossHair() {
 	if (!ensure(ControlledTank)) { return; }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
-		ControlledTank->AimAt(HitLocation);
+		ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(HitLocation);
 	}	
 	
 }
@@ -68,8 +66,4 @@ bool ATankPlayerController::GetCrossHairTargetLocation(FVector& TargetLocation) 
 
 	return true;
 
-}
-
-ATank* ATankPlayerController::GetControlledTank() const {
-	return ControlledTank;
 }

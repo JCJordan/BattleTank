@@ -6,7 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
 class UTankAimingComponent;
 
 // Class for controlling tank as player.
@@ -21,14 +20,11 @@ public:
 
 protected:
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;
-
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 
 private:
-	ATank* ControlledTank;
+	APawn* ControlledTank;
 	void AimAtCrossHair();
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	bool GetCrossHairTargetLocation(FVector& TargetLocation) const;

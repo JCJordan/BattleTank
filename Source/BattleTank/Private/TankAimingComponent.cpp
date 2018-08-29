@@ -3,6 +3,9 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
+#include "Engine/World.h"
+#include "Engine/StaticMeshSocket.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -14,7 +17,7 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	return;
 }
 
-void UTankAimingComponent::AimAt(FVector TargetLocation, float InitialProjectileSpeed) {
+void UTankAimingComponent::AimAt(FVector TargetLocation) {
 
 	if (!ensure(Barrel && Turret)) { return; }
 	FVector LaunchVelocity;
@@ -39,6 +42,21 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 
 	Barrel->Elevate(DeltaRotation.Pitch);
 	Turret->Turn(DeltaRotation.Yaw);
+
+	return;
+}
+
+void UTankAimingComponent::Fire() {
+
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime;
+	if (isReloaded) {
+		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
+
+		Projectile->LaunchProjectile(InitialProjectileSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+	}
 
 	return;
 }

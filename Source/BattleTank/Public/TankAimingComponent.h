@@ -15,6 +15,7 @@ enum class EFiringState : uint8 {
 
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 // Component used by Tank to manage aiming
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -28,7 +29,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
-	void AimAt(FVector HitLocation, float InitialProjectileSpeed);
+	void AimAt(FVector HitLocation);
+
+	// Make the tank fire at it's current target location.
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
 
 protected:
 
@@ -37,8 +42,22 @@ protected:
 
 private:
 
+	// Initial launch speed of Projectile
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float InitialProjectileSpeed = 15000; // in cm/s 
+
+	// Time in seconds to reload barrel.
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTime = 3.0f; // In Seconds
+
+	// Reference to Projectile Blueprint Actor
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
+
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+	float LastFireTime = 0.0;
 
 	void MoveBarrelTowards(FVector AimDirection);
 	
