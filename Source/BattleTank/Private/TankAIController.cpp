@@ -4,6 +4,7 @@
 #include "Tank.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/NavMovementComponent.h"
 #include "Engine/World.h"
 
 void ATankAIController::BeginPlay() {
@@ -21,10 +22,11 @@ void ATankAIController::Tick(float DeltaTime) {
 
 	Super::Tick(DeltaTime);
 	if (PlayerTank) {
+
+		MoveToActor(PlayerTank, AcceptanceRadius);
+
 		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 		ControlledTank->Fire();
 	}
 
 }
-
-
