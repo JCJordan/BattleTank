@@ -30,6 +30,7 @@ void UTankAimingComponent::BeginPlay() {
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
 
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (GetWorld()->GetTimeSeconds() - LastFireTime < ReloadTime) { FiringState = EFiringState::Reloading; }
 	else if (IsBarrelMoving()) { FiringState = EFiringState::Aiming; }
 	else { FiringState = EFiringState::Ready; }
