@@ -15,6 +15,7 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 public:
 
 	UTankTrack();
+	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	// Sets throttle between -1 and 1.
@@ -24,5 +25,10 @@ public:
 	// Set max driving force that throttle can cause.
 	UPROPERTY(EditDefaultsOnly)
 	float MaxDrivingForce = 40000000; // 40 ton tank (kg) * 1000g acceleration (1000000cm/s)
+
+private:
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 };
