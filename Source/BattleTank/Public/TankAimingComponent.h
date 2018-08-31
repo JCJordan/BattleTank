@@ -46,7 +46,7 @@ private:
 
 	// Initial launch speed of Projectile
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float InitialProjectileSpeed = 15000; // in cm/s 
+	float InitialProjectileSpeed = 15000; // in cm/s (170000 is top real tank speed)
 
 	// Time in seconds to reload barrel.
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
