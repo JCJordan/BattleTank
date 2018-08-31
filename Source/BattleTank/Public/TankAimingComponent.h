@@ -10,7 +10,8 @@ UENUM()
 enum class EFiringState : uint8 {
 	Reloading,
 	Aiming,
-	Ready
+	Ready,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -37,10 +38,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Reload();
+
+	int32 GetCurrentAmmoStock() const;
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Firing")
+	int32 CurrentAmmoStock = 0;
 
 private:
 
@@ -60,6 +69,10 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	float LastFireTime = 0.0;
+
+	// Max Ammo Tank can hold.
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 MaxAmmoCapacity = 3;
 
 	FVector TargetAimDirection;
 
