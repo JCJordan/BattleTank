@@ -29,4 +29,12 @@ void ATankAIController::Tick(float DeltaTime) {
 	ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(PlayerTank->GetActorLocation());
 	ControlledTank->FindComponentByClass<UTankAimingComponent>()->Fire();
 
+	if (CheckForReload()) { ControlledTank->FindComponentByClass<UTankAimingComponent>()->Reload(); }
+
+}
+
+bool ATankAIController::CheckForReload() const {
+
+	return ControlledTank->FindComponentByClass<UTankAimingComponent>()->GetCurrentAmmoStock() == 0;
+
 }

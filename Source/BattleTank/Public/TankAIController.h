@@ -25,6 +25,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float AcceptanceRadius = 7000;
 
-
+	bool CheckForReload() const;
 
 };
