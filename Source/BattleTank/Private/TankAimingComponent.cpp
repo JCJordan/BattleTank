@@ -61,6 +61,9 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	FRotator DeltaRotation = TargetAimRotation - BarrelRotation;
 
 	Barrel->Elevate(DeltaRotation.Pitch);
+	// TODO is there a better way to do this?
+	if (DeltaRotation.Yaw > 180) { DeltaRotation.Yaw = DeltaRotation.Yaw - 360; }
+	else if (DeltaRotation.Yaw < -180) { DeltaRotation.Yaw = DeltaRotation.Yaw + 360; }
 	Turret->Turn(DeltaRotation.Yaw);
 
 	return;
