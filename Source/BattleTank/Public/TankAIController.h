@@ -23,7 +23,7 @@ private:
 
 	// How close enemy tank will get to player tank (in cms)
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-	float AcceptanceRadius = 3000;
+	float AcceptanceRadius = 7000;
 
 
 
