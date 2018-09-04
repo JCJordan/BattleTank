@@ -42,7 +42,7 @@ private:
 	URadialForceComponent* ExplosionForce = nullptr;
 
 	// Delay between projectile hit and self-destruction.
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DestroyDelay = 3.0f;
 
 	UFUNCTION()
