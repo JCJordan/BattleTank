@@ -41,7 +41,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	URadialForceComponent* ExplosionForce = nullptr;
 
+	// Delay between projectile hit and self-destruction.
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float DestroyDelay = 3.0f;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
+	void DestroyProjectile();
+
 };
