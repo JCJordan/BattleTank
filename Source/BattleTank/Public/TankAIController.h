@@ -15,6 +15,7 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 private:
 
@@ -26,5 +27,8 @@ private:
 	float AcceptanceRadius = 7000;
 
 	bool CheckForReload() const;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 
 };

@@ -17,6 +17,7 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 protected:
 
@@ -41,4 +42,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float CrosshairYLocation = 0.33333;
 	
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 };

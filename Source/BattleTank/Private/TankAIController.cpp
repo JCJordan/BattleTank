@@ -5,6 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/NavMovementComponent.h"
 #include "Engine/World.h"
+#include "Tank.h"
 #include "TankAimingComponent.h"
 
 void ATankAIController::BeginPlay() {
@@ -15,6 +16,21 @@ void ATankAIController::BeginPlay() {
 
 	if (!ensure(ControlledTank)) { UE_LOG(LogTemp, Error, TEXT("Not possessing tank!")); }
 	if (!ensure(PlayerTank)) { UE_LOG(LogTemp, Error, TEXT("Can't find player tank!")); }
+
+}
+
+void ATankAIController::SetPawn(APawn* InPawn) {
+
+	Super::SetPawn(InPawn);
+
+	if(InPawn){
+		
+		ATank* PossessedTank = dynamic_cast<ATank*>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+	
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
+
+	}
 
 }
 
@@ -36,5 +52,11 @@ void ATankAIController::Tick(float DeltaTime) {
 bool ATankAIController::CheckForReload() const {
 
 	return ControlledTank->FindComponentByClass<UTankAimingComponent>()->GetCurrentAmmoStock() == 0;
+
+}
+
+void ATankAIController::OnPossessedTankDeath() {
+
+	UE_LOG(LogTemp, Warning, TEXT("Tank Died!"));
 
 }

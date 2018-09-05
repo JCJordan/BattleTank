@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 
 void ATankPlayerController::BeginPlay() {
@@ -17,6 +18,21 @@ void ATankPlayerController::BeginPlay() {
 	if (ensure(AimingComponent)) { FoundAimingComponent(AimingComponent); }
 	else { UE_LOG(LogTemp, Error, TEXT("Aiming Component not found on controlled tank! (At BeginPlay)")) }
 	
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn) {
+
+	Super::SetPawn(InPawn);
+
+	if (InPawn) {
+
+		ATank* PossessedTank = dynamic_cast<ATank*>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+
+	}
+
 }
 
 void ATankPlayerController::Tick(float DeltaTime) {
@@ -65,5 +81,11 @@ bool ATankPlayerController::GetCrossHairTargetLocation(FVector& TargetLocation) 
 	TargetLocation = CameraLocation + (CameraRotation * CrossHairRange);
 
 	return true;
+
+}
+
+void ATankPlayerController::OnPossessedTankDeath() {
+
+	UE_LOG(LogTemp, Warning, TEXT("Tank Died!"));
 
 }
