@@ -14,6 +14,7 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHealth = MaxHealth;
 
 }
 
@@ -21,5 +22,23 @@ void ATank::BeginPlay()
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+}
+
+float ATank::TakeDamage(float DamageAmount, FDamageEvent const &DamageEvent, AController* AInstigator, AActor* DamageCauser) {
+
+	int32 DamageToApply = FMath::Clamp(FPlatformMath::RoundToInt(DamageAmount), 0, CurrentHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Taken hit of damage %f and applied damage %i"), DamageAmount, DamageToApply);
+
+	CurrentHealth -= DamageToApply;
+	if (CurrentHealth <= 0) { UE_LOG(LogTemp, Warning, TEXT("%s died!"), *GetName()); }
+
+	return DamageToApply;
+
+}
+
+float ATank::GetHealthPercent() const {
+	
+	return static_cast<float>(CurrentHealth) / static_cast<float>(MaxHealth);
 
 }
