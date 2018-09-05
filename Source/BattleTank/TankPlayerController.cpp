@@ -87,5 +87,6 @@ bool ATankPlayerController::GetCrossHairTargetLocation(FVector& TargetLocation) 
 void ATankPlayerController::OnPossessedTankDeath() {
 
 	UE_LOG(LogTemp, Warning, TEXT("Tank Died!"));
+	StartSpectatingOnly();
 
 }

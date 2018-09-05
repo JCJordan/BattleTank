@@ -57,6 +57,7 @@ bool ATankAIController::CheckForReload() const {
 
 void ATankAIController::OnPossessedTankDeath() {
 
+	ControlledTank->DetachFromControllerPendingDestroy();
 	UE_LOG(LogTemp, Warning, TEXT("Tank Died!"));
 
 }
