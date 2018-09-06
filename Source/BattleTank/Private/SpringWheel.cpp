@@ -11,23 +11,23 @@ ASpringWheel::ASpringWheel()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
+	Spring->SetRelativeLocation(FVector(0.0f, 0.0f, -200.0f));
+	ApplyDefaultSpringSettings();
+	SetRootComponent(Spring);
+
 	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	SetRootComponent(Mass);
+	Mass->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
 	Mass->SetSimulatePhysics(true);
 	Mass->SetMassOverrideInKg(FName("None"), 10000.0f, true);
 	Mass->SetCollisionProfileName(FName("PhysicsActor"));
 
 	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->AttachToComponent(Mass, FAttachmentTransformRules::KeepRelativeTransform);
+	Wheel->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
 	Wheel->SetRelativeLocation(FVector(0.0f, 0.0f, -400.0f));
 	Wheel->SetSimulatePhysics(true);
 	Wheel->SetMassOverrideInKg(FName("None"), 100.0f, true);
-	Wheel->SetCollisionProfileName(FName("PhysicsActor"));
-
-	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
-	Spring->AttachToComponent(Mass, FAttachmentTransformRules::KeepRelativeTransform);
-	Spring->SetRelativeLocation(FVector(0.0f, 0.0f, -200.0f));
-	ApplyDefaultSpringSettings();
+	Wheel->SetCollisionProfileName(FName("PhysicsActor"));	
 
 }
 
