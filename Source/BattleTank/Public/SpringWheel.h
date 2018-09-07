@@ -34,6 +34,7 @@ private:
 	void SetupNewMass();
 	void ApplyDefaultSpringSettings();
 	void ApplyDefaultAxleSettings();
+	void UpdateConstraints();
 	void ApplyForce();
 
 	UFUNCTION()

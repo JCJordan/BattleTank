@@ -40,8 +40,6 @@ ASpringWheel::ASpringWheel()
 
 void ASpringWheel::ApplyDefaultSpringSettings() {
 
-	Spring->SetConstrainedComponents(Mass, NAME_None, Axle, NAME_None);
-
 	Spring->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 	Spring->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 	Spring->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.0f);
@@ -58,8 +56,6 @@ void ASpringWheel::ApplyDefaultSpringSettings() {
 
 void ASpringWheel::ApplyDefaultAxleSettings() {
 
-	AxleConstraint->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
-
 	AxleConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 	AxleConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 
@@ -74,6 +70,7 @@ void ASpringWheel::BeginPlay()
 	Wheel->OnComponentHit.AddDynamic(this, &ASpringWheel::OnComponentHit);
 
 	SetupNewMass();
+	UpdateConstraints();
 	
 }
 
@@ -83,6 +80,11 @@ void ASpringWheel::SetupNewMass() {
 	UPrimitiveComponent* BodyRoot = dynamic_cast<UPrimitiveComponent*>(GetAttachParentActor()->GetRootComponent());
 	if (!BodyRoot) { return; }
 	Mass = BodyRoot;
+	
+}
+
+void ASpringWheel::UpdateConstraints() {
+
 	Spring->SetConstrainedComponents(Mass, NAME_None, Axle, NAME_None);
 	AxleConstraint->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
 
