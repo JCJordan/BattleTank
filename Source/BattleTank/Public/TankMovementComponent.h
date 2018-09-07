@@ -30,7 +30,10 @@ public:
 
 private:
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UTankTrack* LeftTrack = nullptr;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UTankTrack* RightTrack = nullptr;
 	
 	// Called from pathfinding logic by AI Controllers (In MoveToActor)
