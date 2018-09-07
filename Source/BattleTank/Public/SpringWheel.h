@@ -34,6 +34,10 @@ private:
 	void SetupNewMass();
 	void ApplyDefaultSpringSettings();
 	void ApplyDefaultAxleSettings();
+	void ApplyForce();
+
+	UFUNCTION()
+	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPrimitiveComponent* Mass = nullptr;
@@ -50,4 +54,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* AxleConstraint = nullptr;
 	
+	float TotalForceMagnitudeThisFrame = 0.0f;
+
 };

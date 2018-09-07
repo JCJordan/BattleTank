@@ -10,13 +10,14 @@ ASpringWheel::ASpringWheel()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetTickGroup(ETickingGroup::TG_PostPhysics);
 
 	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
 	SetRootComponent(Spring);
 
 	Axle = CreateDefaultSubobject<USphereComponent>(FName("Axle"));
 	Axle->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
-	Axle->SetRelativeLocation(FVector(0.0f, 0.0f, -150.0f));
+	Axle->SetRelativeLocation(FVector(0.0f, 0.0f, -70.0f));
 	Axle->SetSimulatePhysics(true);
 	Axle->SetMassOverrideInKg(FName("None"), 1000.0f, true);
 	Axle->SetCollisionProfileName(FName("OverlapAll"));
@@ -69,6 +70,9 @@ void ASpringWheel::BeginPlay()
 {
 	Super::BeginPlay();		
 	
+	Wheel->SetNotifyRigidBodyCollision(true);
+	Wheel->OnComponentHit.AddDynamic(this, &ASpringWheel::OnComponentHit);
+
 	SetupNewMass();
 	
 }
@@ -88,11 +92,24 @@ void ASpringWheel::SetupNewMass() {
 void ASpringWheel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	TotalForceMagnitudeThisFrame = 0.0f;
 
 }
 
 void ASpringWheel::AddDrivingForce(float ForceMagnitude){
 
-	Wheel->AddForce(Axle->GetForwardVector() * ForceMagnitude);
+	TotalForceMagnitudeThisFrame += ForceMagnitude;
+
+}
+
+void ASpringWheel::ApplyForce() {
+
+	Wheel->AddForce(Axle->GetForwardVector() * TotalForceMagnitudeThisFrame);
+
+}
+
+void ASpringWheel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
+
+	ApplyForce();
 
 }
