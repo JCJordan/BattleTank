@@ -7,6 +7,7 @@
 #include "SpringWheel.generated.h"
 
 class UStaticMeshComponent;
+class UPrimitiveComponent;
 class UPhysicsConstraintComponent;
 
 UCLASS()
@@ -28,10 +29,11 @@ public:
 
 private:
 
+	void SetupNewMass();
 	void ApplyDefaultSpringSettings();
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* Mass = nullptr;
+	UPrimitiveComponent* Mass = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* Wheel = nullptr;

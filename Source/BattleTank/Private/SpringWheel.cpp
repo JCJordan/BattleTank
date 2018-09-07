@@ -12,28 +12,22 @@ ASpringWheel::ASpringWheel()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
-	Spring->SetRelativeLocation(FVector(0.0f, 0.0f, -200.0f));
-	ApplyDefaultSpringSettings();
 	SetRootComponent(Spring);
-
-	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	Mass->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
-	Mass->SetSimulatePhysics(true);
-	Mass->SetMassOverrideInKg(FName("None"), 10000.0f, true);
-	Mass->SetCollisionProfileName(FName("PhysicsActor"));
 
 	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
 	Wheel->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
-	Wheel->SetRelativeLocation(FVector(0.0f, 0.0f, -400.0f));
+	Wheel->SetRelativeLocation(FVector(0.0f, 0.0f, -150.0f));
 	Wheel->SetSimulatePhysics(true);
-	Wheel->SetMassOverrideInKg(FName("None"), 100.0f, true);
+	Wheel->SetMassOverrideInKg(FName("None"), 1000.0f, true);
 	Wheel->SetCollisionProfileName(FName("PhysicsActor"));	
+
+	ApplyDefaultSpringSettings();
 
 }
 
 void ASpringWheel::ApplyDefaultSpringSettings() {
 
-	Spring->SetConstrainedComponents(Mass, FName("None"), Wheel, FName("None"));
+	Spring->SetConstrainedComponents(Mass, NAME_None, Wheel, NAME_None);
 
 	Spring->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 	Spring->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
@@ -45,15 +39,27 @@ void ASpringWheel::ApplyDefaultSpringSettings() {
 	Spring->SetLinearPositionDrive(false, false, true);
 	Spring->SetLinearVelocityTarget(FVector(0.0f, 0.0f, 0.0f));
 	Spring->SetLinearVelocityDrive(false, false, true);
-	Spring->SetLinearDriveParams(5000.0f, 1000.0f, 0.0f);
+	Spring->SetLinearDriveParams(500.0f, 100.0f, 0.0f);
 
 }
 
 // Called when the game starts or when spawned
 void ASpringWheel::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();		
 	
+	SetupNewMass();
+	
+}
+
+void ASpringWheel::SetupNewMass() {
+
+	if (!GetAttachParentActor()) { return; }
+	UPrimitiveComponent* BodyRoot = dynamic_cast<UPrimitiveComponent*>(GetAttachParentActor()->GetRootComponent());
+	if (!BodyRoot) { return; }
+	Mass = BodyRoot;
+	Spring->SetConstrainedComponents(Mass, NAME_None, Wheel, NAME_None);
+
 }
 
 // Called every frame

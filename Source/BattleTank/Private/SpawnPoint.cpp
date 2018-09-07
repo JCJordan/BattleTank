@@ -21,9 +21,11 @@ void USpawnPoint::BeginPlay()
 	Super::BeginPlay();
 
 	if (!SpawnClass) { return; }
-	AActor* NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
+	// If spawning in wrong place, try deleting and remaking spring wheel blueprint.
+	AActor* NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 	if (!NewActor) { return; }
-	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	NewActor->FinishSpawning(GetComponentTransform());
 	
 }
 
