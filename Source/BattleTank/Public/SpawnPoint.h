@@ -6,6 +6,7 @@
 #include "Components/SceneComponent.h"
 #include "SpawnPoint.generated.h"
 
+class ASpringWheel;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API USpawnPoint : public USceneComponent
@@ -23,10 +24,14 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	AActor* GetSpawnedActor() const;
 
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AActor> SpawnClass = nullptr;
 	
+	UPROPERTY()
+	AActor* SpawnedActor = nullptr;
+
 };
