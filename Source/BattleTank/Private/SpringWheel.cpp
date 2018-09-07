@@ -1,7 +1,7 @@
 // Copyright FairgroundPandaStudio
 
 #include "SpringWheel.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 
@@ -14,20 +14,32 @@ ASpringWheel::ASpringWheel()
 	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
 	SetRootComponent(Spring);
 
-	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
-	Wheel->SetRelativeLocation(FVector(0.0f, 0.0f, -150.0f));
+	Axle = CreateDefaultSubobject<USphereComponent>(FName("Axle"));
+	Axle->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
+	Axle->SetRelativeLocation(FVector(0.0f, 0.0f, -150.0f));
+	Axle->SetSimulatePhysics(true);
+	Axle->SetMassOverrideInKg(FName("None"), 1000.0f, true);
+	Axle->SetCollisionProfileName(FName("OverlapAll"));
+	Axle->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
+	Wheel->AttachToComponent(Axle, FAttachmentTransformRules::KeepRelativeTransform);
 	Wheel->SetSimulatePhysics(true);
 	Wheel->SetMassOverrideInKg(FName("None"), 1000.0f, true);
-	Wheel->SetCollisionProfileName(FName("PhysicsActor"));	
+	Wheel->SetCollisionProfileName(FName("PhysicsActor"));
+	Wheel->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	AxleConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Axle Constraint"));
+	AxleConstraint->AttachToComponent(Axle, FAttachmentTransformRules::KeepRelativeTransform);
 
 	ApplyDefaultSpringSettings();
+	ApplyDefaultAxleSettings();	
 
 }
 
 void ASpringWheel::ApplyDefaultSpringSettings() {
 
-	Spring->SetConstrainedComponents(Mass, NAME_None, Wheel, NAME_None);
+	Spring->SetConstrainedComponents(Mass, NAME_None, Axle, NAME_None);
 
 	Spring->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 	Spring->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
@@ -40,6 +52,15 @@ void ASpringWheel::ApplyDefaultSpringSettings() {
 	Spring->SetLinearVelocityTarget(FVector(0.0f, 0.0f, 0.0f));
 	Spring->SetLinearVelocityDrive(false, false, true);
 	Spring->SetLinearDriveParams(500.0f, 100.0f, 0.0f);
+
+}
+
+void ASpringWheel::ApplyDefaultAxleSettings() {
+
+	AxleConstraint->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
+
+	AxleConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.0f);
+	AxleConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.0f);
 
 }
 
@@ -58,7 +79,8 @@ void ASpringWheel::SetupNewMass() {
 	UPrimitiveComponent* BodyRoot = dynamic_cast<UPrimitiveComponent*>(GetAttachParentActor()->GetRootComponent());
 	if (!BodyRoot) { return; }
 	Mass = BodyRoot;
-	Spring->SetConstrainedComponents(Mass, NAME_None, Wheel, NAME_None);
+	Spring->SetConstrainedComponents(Mass, NAME_None, Axle, NAME_None);
+	AxleConstraint->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
 
 }
 

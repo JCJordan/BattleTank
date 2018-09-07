@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpringWheel.generated.h"
 
-class UStaticMeshComponent;
+class USphereComponent;
 class UPrimitiveComponent;
 class UPhysicsConstraintComponent;
 
@@ -31,14 +31,21 @@ private:
 
 	void SetupNewMass();
 	void ApplyDefaultSpringSettings();
+	void ApplyDefaultAxleSettings();
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPrimitiveComponent* Mass = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* Wheel = nullptr;
+	USphereComponent* Wheel = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USphereComponent* Axle = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* Spring = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPhysicsConstraintComponent* AxleConstraint = nullptr;
 	
 };
